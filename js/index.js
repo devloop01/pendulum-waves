@@ -26,7 +26,7 @@ class App {
 		this.pendulums = [];
 		this.pendulumGap = 2;
 
-		this.audioUrl = "/Mountains.5bb6d108.ogg";
+		this.audioUrl = "/Mountains.e7b3cc42.ogg";
 
 		this.startMotion = false;
 
