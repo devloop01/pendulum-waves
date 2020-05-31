@@ -1,0 +1,37 @@
+{
+  "name": "pendulum-waves",
+  "version": "1.0.0",
+  "description": "Satisfying pendulum wave animation using THREE.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html",
+    "prebuild-dev": "shx rm -rf dist/*",
+    "build-dev": "parcel build index.html --no-minify --public-url ./",
+    "prebuild": "shx rm -rf dist/*",
+    "build": "parcel build index.html --public-url ./",
+    "push-gh-pages": "push-dir --dir=dist --branch=gh-pages --cleanup --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devloop01/pendulum-waves.git"
+  },
+  "author": "Sikriti Dakua",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/devloop01/pendulum-waves/issues"
+  },
+  "homepage": "https://github.com/devloop01/pendulum-waves#readme",
+  "dependencies": {
+    "dat.gui": "^0.7.7",
+    "gsap": "^3.2.6",
+    "parcel": "^1.12.4",
+    "parcel-bundler": "^1.12.4",
+    "postprocessing": "^6.13.5",
+    "push-dir": "^0.4.1",
+    "three": "^0.117.1",
+    "three-orbitcontrols": "^2.110.3"
+  },
+  "devDependencies": {
+    "shx": "^0.3.2"
+  }
+}
