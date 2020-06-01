@@ -63,6 +63,8 @@ class App {
 		this.renderer = new THREE.WebGLRenderer({ antialias: true });
 		this.renderer.setPixelRatio(window.devicePixelRatio);
 		this.renderer.setSize(window.innerWidth, window.innerHeight);
+		this.renderer.shadowMap.enabled = true;
+		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 		document.body.appendChild(this.renderer.domElement);
 	}
@@ -130,6 +132,11 @@ class App {
 			this.pendulumProps.length,
 			-this.pendulumProps.length / 2
 		);
+		this.spotLight.castShadow = true;
+		this.spotLight.shadow.mapSize.width = 1024;
+		this.spotLight.shadow.mapSize.height = 1024;
+		this.spotLight.shadow.camera.near = 0.5;
+		this.spotLight.shadow.camera.far = 200;
 
 		const pointLight = new THREE.PointLight(0xffffff, 0.2);
 
@@ -416,7 +423,7 @@ class App {
 		if (this.settings.fog.enabled) {
 			this.renderer.alpha = false;
 			this.scene.fog = new THREE.Fog(
-				this.settings.bgColor,
+				this.settings.fogColor,
 				this.settings.fog.min,
 				this.settings.fog.max
 			);

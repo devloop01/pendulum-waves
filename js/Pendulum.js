@@ -35,6 +35,8 @@ class Pendulum {
 		// the hook that holds the wire
 		const hookGeometry = new THREE.TorusGeometry(0.1, 0.03, 32, 64);
 		this.hook = new THREE.Mesh(hookGeometry, metalMaterial);
+		this.hook.castShadow = true;
+		this.hook.receiveShadow = true;
 
 		// The wire that holds the sphere
 		const wireGeometry = new THREE.CylinderGeometry(
@@ -45,10 +47,14 @@ class Pendulum {
 		);
 		wireGeometry.translate(0, -this.length / 2, 0);
 		this.wire = new THREE.Mesh(wireGeometry, metalMaterial);
+		this.wire.castShadow = true;
+		this.wire.receiveShadow = true;
 
 		// The ring that surrounds the sphere
 		const torusGeometry = new THREE.TorusGeometry(0.6, 0.1, 32, 64);
 		this.torus = new THREE.Mesh(torusGeometry, metalMaterial);
+		this.torus.castShadow = true;
+		this.torus.receiveShadow = true;
 
 		// The sphere
 		const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
@@ -56,6 +62,8 @@ class Pendulum {
 			this.sphereMaterialProps
 		);
 		this.sphere = new THREE.Mesh(sphereGeometry, this.sphereMaterial);
+		this.sphere.castShadow = true;
+		this.sphere.receiveShadow = true;
 	}
 
 	addToScene() {
