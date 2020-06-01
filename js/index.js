@@ -23,7 +23,6 @@ class App {
 			},
 		};
 
-		this.pendulums = [];
 		this.pendulumGap = 2;
 
 		this.audioUrl = "/Mountains.e7b3cc42.ogg";
@@ -167,6 +166,8 @@ class App {
 	}
 
 	addPendulums(n) {
+		this.pendulums = [];
+
 		for (let i = 0; i < n; i++) {
 			this.pendulums.push(
 				new Pendulum(this.scene, {
@@ -175,6 +176,7 @@ class App {
 					length: this.pendulumProps.length,
 					startAngle: this.pendulumProps.startAngle,
 					position: this.pendulumProps.position,
+					sphereMaterialProps: this.settings.materialProps.sphere,
 				})
 			);
 		}
@@ -183,6 +185,7 @@ class App {
 			// loop through the pendulums and bring it a little forward.
 			pendulum.z += this.totalRodLength / 2;
 			pendulum.updatePosition();
+			pendulum.addToScene();
 		});
 	}
 
@@ -230,7 +233,7 @@ class App {
 
 	initAudio() {
 		this.audio = new AudioPlayer(this.audioUrl, () => {
-			console.log("audio loaded");
+			console.info("audio loaded");
 			this.hideLoader();
 		});
 	}
@@ -259,14 +262,13 @@ class App {
 	}
 
 	resetScene() {
-		console.log("reseting...");
-		console.log(this.scene.children.length);
+		console.info("reseting...");
 
 		while (this.scene.children.length > 0) {
 			this.scene.remove(this.scene.children[0]);
 		}
 
-		this.audio.reset();
+		// this.audio.reset();
 		this.startMotion = false;
 
 		cancelAnimationFrame(this.raf);
@@ -302,9 +304,19 @@ class App {
 						this.audio.play();
 				},
 			},
+			materialProps: {
+				sphere: {
+					color: 0xffdf40,
+					emissive: 0xbd1816,
+					emissiveIntensity: 10,
+					metalness: 0,
+					roughness: 0,
+				},
+			},
 			bgColor: "#000000",
 			fogColor: "#000000",
 			fog: {
+				enabled: true,
 				min: 1,
 				max: 60,
 			},
@@ -356,10 +368,33 @@ class App {
 
 		const fogFolder = GUI.addFolder("FOG");
 		fogFolder
+			.add(this.settings.fog, "enabled")
+			.onChange(() => this.onPropsChange());
+		fogFolder
 			.add(this.settings.fog, "min", 0.1, 10)
 			.onChange(() => this.onPropsChange());
 		fogFolder
 			.add(this.settings.fog, "max", 40, 100)
+			.onChange(() => this.onPropsChange());
+
+		const metarialsFolder = GUI.addFolder("Material Props");
+		const sphereMaterialFolder = metarialsFolder.addFolder("Sphere");
+		sphereMaterialFolder
+			.addColor(this.settings.materialProps.sphere, "color")
+			.onChange(() => this.onPropsChange());
+		sphereMaterialFolder
+			.addColor(this.settings.materialProps.sphere, "emissive")
+			.onChange(() => this.onPropsChange());
+		sphereMaterialFolder
+			.add(this.settings.materialProps.sphere, "emissiveIntensity", 0, 10)
+			.onChange(() => this.onPropsChange());
+		sphereMaterialFolder
+			.add(this.settings.materialProps.sphere, "metalness", 0, 1)
+			.step(0.1)
+			.onChange(() => this.onPropsChange());
+		sphereMaterialFolder
+			.add(this.settings.materialProps.sphere, "roughness", 0, 1)
+			.step(0.1)
 			.onChange(() => this.onPropsChange());
 
 		GUI.add(
@@ -377,11 +412,27 @@ class App {
 
 	onPropsChange() {
 		this.scene.background = new THREE.Color(this.settings.bgColor);
-		this.scene.fog = new THREE.Fog(
-			this.settings.fogColor,
-			this.settings.fog.min,
-			this.settings.fog.max
-		);
+
+		if (this.settings.fog.enabled) {
+			this.renderer.alpha = false;
+			this.scene.fog = new THREE.Fog(
+				this.settings.bgColor,
+				this.settings.fog.min,
+				this.settings.fog.max
+			);
+		} else {
+			this.renderer.alpha = true;
+			if (this.scene.fog) {
+				this.scene.fog.near = 0.1;
+				this.scene.fog.far = 0;
+			}
+		}
+
+		this.pendulums.forEach((pendulum) => {
+			pendulum.removeFromScene();
+			pendulum.updateSphereMaterial(this.settings.materialProps.sphere);
+			pendulum.addToScene();
+		});
 	}
 
 	onResize() {
