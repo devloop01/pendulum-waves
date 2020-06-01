@@ -268,7 +268,7 @@ class App {
 			this.scene.remove(this.scene.children[0]);
 		}
 
-		// this.audio.reset();
+		this.audio.reset();
 		this.startMotion = false;
 
 		cancelAnimationFrame(this.raf);
