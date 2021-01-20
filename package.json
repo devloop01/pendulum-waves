@@ -23,7 +23,7 @@
   "homepage": "https://github.com/devloop01/pendulum-waves#readme",
   "dependencies": {
     "dat.gui": "^0.7.7",
-    "gsap": "^3.2.6",
+    "gsap": "^3.6.0",
     "parcel": "^1.12.4",
     "parcel-bundler": "^1.12.4",
     "postprocessing": "^6.13.5",
