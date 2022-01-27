@@ -28,7 +28,7 @@
     "parcel-bundler": "^1.12.4",
     "postprocessing": "^6.13.5",
     "push-dir": "^0.4.1",
-    "three": "^0.117.1",
+    "three": "^0.137.0",
     "three-orbitcontrols": "^2.110.3"
   },
   "devDependencies": {
